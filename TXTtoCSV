@@ -1,0 +1,34 @@
+path = "<INPUT_YOUR_PATH_HERE>"
+os.chdir(path)
+
+for root, dirs, files in os.walk(path):
+        for name in dirs:
+            print("MAIN DIRECTORY: ", os.path.join(root,name))
+            sign_word = os.path.join(root,name)        
+            csv_files = glob.glob(os.path.join(sign_word, "*.txt"))
+            csv_path = r'<ENTER_CSV_PATH_DESTINATION_HERE>' + name
+            if((os.path.isdir(csv_path)) == False):
+                os.mkdir(csv_path)
+            csv_ctr = 0
+                
+            # loop over the list of txt files
+            for f in csv_files:
+                # counter for csv naming
+                
+                # read the txt file
+                df = pd.read_csv(f, delimiter=',', header=None)
+                df = df.replace(['\[','\]'], ['',''], regex=True)
+
+                # print the location and filename
+                print('Location:', f)
+                print('File Name:', f.split("\\")[-1])
+
+                # print the content
+                print('Content:')
+                display(df)
+                
+                # convert to csv
+                print("Dirs: ", os.path.join(root,name))
+                df.to_csv (csv_path + '\\' + name + str(csv_ctr) + '.csv', index=None, header=False)
+                csv_ctr += 1
+                print()
